@@ -43,8 +43,8 @@ public class WorkingSessionController {
         User theUser = userService.findOptionalUserByEmail(authentication.getName()).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "User has not been found."));
         model.addAttribute("sortField", sortField);
-        Page<WorkingSession> workingTimePage = workingSessionService.getUserSortedWorkingTimePage(page, direction, sortField, theUser);
-        model.addAttribute("workingTimePage", workingTimePage);
+        Page<WorkingSession> workingSessionPage = workingSessionService.getUserSortedWorkingTimePage(page, direction, sortField, theUser);
+        model.addAttribute("workingSessionPage", workingSessionPage);
         return "workingTime/workingTimeList";
     }
 
