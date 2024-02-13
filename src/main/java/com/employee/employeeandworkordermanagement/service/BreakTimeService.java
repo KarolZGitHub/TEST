@@ -77,4 +77,7 @@ public class BreakTimeService {
             return Page.empty();
         }
     }
+    public Page<BreakTime> getAllBreakTimesList(PageRequest pageRequest) {
+        return breakTimeRepository.findAll(pageRequest);
+    }
 }

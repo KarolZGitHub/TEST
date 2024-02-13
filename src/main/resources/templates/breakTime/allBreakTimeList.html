@@ -6,7 +6,7 @@
 <body>
 <div class="container mt-5">
     <h2>Break Times</h2>
-    <form th:action="@{'/break-time/break-time-list-for-user'}" method="get" id="sortForm">
+    <form th:action="@{'/break-time/all-break-times'}" method="get" id="sortForm">
         <div class="btn-group" role="group" aria-label="Sort by">
             <button type="submit" class="btn btn-secondary" name="sortField" value="id">Sort by ID</button>
             <button type="submit" class="btn btn-secondary" name="sortField" value="startTime">Sort by Start</button>
@@ -20,6 +20,9 @@
             <button type="submit" class="btn btn-secondary" name="sortField"
                     value="breakDuration">Sort by Duration
             </button>
+            <button type="submit" class="btn btn-secondary" name="sortField"
+                    value="user">Sort by User
+            </button>
         </div>
     </form>
     <table class="table table-bordered table-striped">
@@ -31,6 +34,7 @@
             <th>Finish Time</th>
             <th>Status</th>
             <th>Break Duration</th>
+            <th>User</th>
         </tr>
         </thead>
         <tbody>
@@ -42,6 +46,7 @@
             <td th:text="${breakTime.finishTime != null ? #temporals.format(breakTime.finishTime, 'yyyy-MM-dd HH:mm:ss') : 'N/A'}"></td>
             <td th:text="${breakTime.isActive ? 'Active' : 'Inactive'}"></td>
             <td th:text="${breakTime.breakDuration != null ? #dates.format(breakTime.breakDuration.toMinutes(), 'HH:mm') : 'N/A'}"></td>
+            <td th:text="${breakTime.user != null ? breakTime.user.getFirstName() + ' ' + breakTime.user.getLastName() : 'N/A'}"></td>
         </tr>
         </tbody>
     </table>

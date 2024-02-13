@@ -3,39 +3,56 @@
 <head th:insert="~{header.html}">
     <title>Main Page</title>
 </head>
-<!-- Navbar -->
 <body>
-<!-- Main container-->
-<div th:if="${user != null}" class="container-fluid">
-    <div class="container-fluid">
-        <h1 th:text="'Welcome to the Employee Manager ' + ${user.firstName}" class="display-4 text-center mt-5"></h1>
+<!-- Main Content Container -->
+<div class="container-fluid mt-5">
+    <!-- Greeting Section -->
+    <div th:if="${user != null}">
+        <h1 th:text="'Welcome to the Employee Manager, ' + ${user.firstName}" class="display-4 text-center"></h1>
+    </div>
+    <div th:if="${user == null}">
+        <h1 class="display-4 text-center">Welcome to the Employee Manager, Guest.</h1>
+    </div>
 
+    <!-- Authenticated User Actions -->
+    <div th:if="${user != null}" class="mt-5">
+        <h2 class="text-center mb-4">User Actions</h2>
+        <div class="row">
+            <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+                <a th:href="@{/task/your-task}" class="btn btn-primary btn-block">Your Task</a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+                <a th:href="@{/designer/all-designers}" class="btn btn-primary btn-block">Show All Designers</a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+                <a th:href="@{/task/all-tasks}" class="btn btn-primary btn-block">Show All Tasks</a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+                <a th:href="@{/work/work-list}" class="btn btn-primary btn-block">Show Work Session List</a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+                <a th:href="@{/break-time/break-time-list-for-user}" class="btn btn-primary btn-block">Show Break Time List</a>
+            </div>
+        </div>
     </div>
-    <div th:if="${user != null}" class="container mt-5">
-        <a th:href="@{/task/your-task}" class="btn btn-primary">Your Task</a>
-    </div>
-    <div th:if="${blockDesignerView}" class="container mt-5">
-        <a th:href="@{/edit/add}" class="btn btn-primary">Add Task</a>
-    </div>
-    <div th:if="${user != null}" class="container mt-5">
-        <a th:href="@{/designer/all-designers}" class="btn btn-primary">Show All Designers</a>
-    </div>
-    <div th:if="${user != null}" class="container mt-5">
-        <a th:href="@{/task/all-tasks}" class="btn btn-primary">Show All Tasks</a>
-    </div>
-    <div th:if="${blockDesignerView}" class="container mt-5">
-        <a th:href="@{/task/archived-tasks}" class="btn btn-primary">Show All Archived Tasks</a>
-    </div>
-    <div th:if="${user != null}" class="container mt-5">
-        <a th:href="@{/work/work-list}" class="btn btn-primary">Show Work List</a>
-    </div>
-    <div th:if="${user != null}" class="container mt-5">
-        <a th:href="@{/break-time/break-time-list-for-user}" class="btn btn-primary">Show Break Time List</a>
-    </div>
-</div>
-<div th:if="${user == null}" class="container-fluid">
-    <div class="container-fluid">
-        <h1 class="display-4 text-center mt-5">Welcome to the Employee Manager guest.</h1>
+
+    <!-- Admin and Designer Actions -->
+    <div th:if="${blockDesignerView}" class="mt-5">
+        <h2 class="text-center mb-4">Admin and Designer Actions</h2>
+        <div class="row justify-content-center">
+            <div class="col-sm-6 col-md-4 mb-3">
+                <a th:href="@{/edit/add}" class="btn btn-secondary btn-block">Add Task</a>
+            </div>
+            <div class="col-sm-6 col-md-4 mb-3">
+                <a th:href="@{/task/archived-tasks}" class="btn btn-secondary btn-block">Show All Archived Tasks</a>
+            </div>
+            <div class="col-sm-6 col-md-4 mb-3">
+                <a th:href="@{/work/all-work-list}" class="btn btn-secondary btn-block">Show All Work Sessions</a>
+            </div>
+            <div class="col-sm-6 col-md-4 mb-3">
+                <a th:href="@{/break-time/all-break-times}" class="btn btn-secondary btn-block">Show All Break Times</a>
+            </div>
+        </div>
     </div>
 </div>
 

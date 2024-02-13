@@ -1,5 +1,6 @@
 package com.employee.employeeandworkordermanagement.controller;
 
+import com.employee.employeeandworkordermanagement.data.Role;
 import com.employee.employeeandworkordermanagement.dto.UserDTO;
 import com.employee.employeeandworkordermanagement.entity.Task;
 import com.employee.employeeandworkordermanagement.entity.User;
@@ -13,7 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 @Controller
@@ -45,7 +49,7 @@ public class WorkingSessionController {
         model.addAttribute("sortField", sortField);
         Page<WorkingSession> workingSessionPage = workingSessionService.getUserSortedWorkingTimePage(page, direction, sortField, theUser);
         model.addAttribute("workingSessionPage", workingSessionPage);
-        return "workingTime/workingTimeList";
+        return "workingSession/workingSessionForUser";
     }
 
     @GetMapping("/all-work-list")
@@ -55,9 +59,9 @@ public class WorkingSessionController {
                                          Model model
     ) {
         model.addAttribute("sortField", sortField);
-        Page<WorkingSession> workingTimePage = workingSessionService.getAllSortedWorkingTimePage(page, direction, sortField);
-        model.addAttribute("workingTimePage", workingTimePage);
-        return "workingTime/workingTimeList";
+        Page<WorkingSession> workingSessionPage = workingSessionService.getAllSortedWorkingTimePage(page, direction, sortField);
+        model.addAttribute("workingSessionPage", workingSessionPage);
+        return "workingSession/workingSessionList";
     }
 
     @GetMapping("finish-work")
@@ -70,7 +74,7 @@ public class WorkingSessionController {
     @GetMapping("start-work")
     public String handleStartWorking(@RequestParam(name = "id") Long id, Authentication authentication) {
         Task task = taskService.findById(id);
-        workingSessionService.createWorkingSession(task,authentication);
+        workingSessionService.createWorkingSession(task, authentication);
         return "redirect:/task/your-task";
     }
 }

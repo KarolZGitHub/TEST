@@ -47,4 +47,16 @@ public class BreakTimeController {
         model.addAttribute("breakTimes", breakTimes);
         return "breakTime/breakTimeListForUser";
     }
+
+    @GetMapping("/all-break-times")
+    public String showAllBreakTimes(@RequestParam(required = false, defaultValue = "0") int page,
+                                    @RequestParam(required = false, defaultValue = "asc") String direction,
+                                    @RequestParam(required = false, defaultValue = "id") String sortField,
+                                    Model model) {
+        model.addAttribute("sortField", sortField);
+        Sort sort = Sort.by(Sort.Direction.fromString(direction), sortField);
+        Page<BreakTime> breakTimes = breakTimeService.getAllBreakTimesList(PageRequest.of(page, 50, sort));
+        model.addAttribute("breakTimes", breakTimes);
+        return "breakTime/allBreakTimeList";
+    }
 }

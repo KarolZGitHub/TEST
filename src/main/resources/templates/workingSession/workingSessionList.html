@@ -7,15 +7,15 @@
 <div class="container">
     <!-- Content -->
     <h2>Working Time List</h2>
-    <form th:action="@{'/work/work-list'}" method="get" id="sortForm">
+    <form th:action="@{'/work/all-work-list'}" method="get" id="sortForm">
         <div class="btn-group" role="group" aria-label="Sort by">
             <button type="submit" class="btn btn-secondary" name="sortField" value="id">Sort by ID</button>
             <button type="submit" class="btn btn-secondary" name="sortField" value="createdAt">Sort by Date</button>
             <button type="submit" class="btn btn-secondary" name="sortField"
-                    value="currentWorkingTime">Sort by Working Time
+                    value="task">Sort by Task
             </button>
             <button type="submit" class="btn btn-secondary" name="sortField"
-                    value="task">Sort by Task
+                    value="user">Sort by User
             </button>
         </div>
     </form>
@@ -35,7 +35,7 @@
             <td th:text="${workingSession.id}"></td>
             <td th:text="${#temporals.format(workingSession.workStarted, 'yyyy-MM-dd HH:mm:ss')} ?: '-'"></td>
             <td th:text="${#temporals.format(workingSession.workFinished, 'yyyy-MM-dd HH:mm:ss')} ?: '-'"></td>
-            <td th:text="${workingSession.user.firstName}"></td>
+            <td th:text="${workingSession.user.firstName + ' ' + workingSession.user.lastName}"></td>
             <td th:text="${workingSession.task.taskName}"></td>
             <td th:text="${workingSession.isActive ? 'Active' : 'Inactive'}"></td>
         </tr>
