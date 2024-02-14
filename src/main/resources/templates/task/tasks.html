@@ -51,8 +51,8 @@
             <td th:if="${task.designer != null}"
                 th:text="${task.designer.firstName} + ' ' + ${task.designer.lastName}"></td>
             <td th:text="${task.taskStatus}"></td>
-            <td th:text="${task.createdAt}"></td>
-            <td th:text="${task.editedAt}"></td>
+            <td th:text="${#temporals.format(task.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td th:text="${#temporals.format(task.editedAt,'yyyy-MM-dd HH:mm:ss')}"></td>
             <td th:text="${task.workDuration.toMinutes()} + ' min'"></td>
             <td th:if="${blockDesignerView}">
                 <a th:if="${task.taskStatus == T(com.employee.employeeandworkordermanagement.data.TaskStatus).PENDING}"

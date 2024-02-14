@@ -1,6 +1,5 @@
 package com.employee.employeeandworkordermanagement.controller;
 
-import com.employee.employeeandworkordermanagement.data.Role;
 import com.employee.employeeandworkordermanagement.dto.UserDTO;
 import com.employee.employeeandworkordermanagement.entity.Task;
 import com.employee.employeeandworkordermanagement.entity.User;
@@ -38,11 +37,11 @@ public class WorkingSessionController {
     }
 
     @GetMapping("/work-list")
-    public String showYourWorkInformation(@RequestParam(required = false, defaultValue = "0") int page,
-                                          @RequestParam(required = false, defaultValue = "asc") String direction,
-                                          @RequestParam(required = false, defaultValue = "id") String sortField,
-                                          Model model,
-                                          Authentication authentication
+    public String showUsersWorkInformation(@RequestParam(required = false, defaultValue = "0") int page,
+                                           @RequestParam(required = false, defaultValue = "asc") String direction,
+                                           @RequestParam(required = false, defaultValue = "id") String sortField,
+                                           Model model,
+                                           Authentication authentication
     ) {
         User theUser = userService.findOptionalUserByEmail(authentication.getName()).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "User has not been found."));

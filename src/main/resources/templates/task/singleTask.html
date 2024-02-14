@@ -24,8 +24,8 @@
             <td th:text="${task.taskName}"></td>
             <td th:text="${task.description}"></td>
             <td th:text="${task.taskStatus}"></td>
-            <td th:text="${task.createdAt}"></td>
-            <td th:text="${task.editedAt}"></td>
+            <td th:text="${#temporals.format(task.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td th:text="${#temporals.format(task.editedAt,'yyyy-MM-dd HH:mm:ss')}"></td>
             <td th:text="${task.workDuration.toMinutes()}"></td>
             <td th:if="${!hideStopButton}">
                 <a

@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/users/**", "/profile/**", "/task/**", "api/**", "/upload/**",
-                        "/designer/**", "/message/**", "/work/**", "break-time/**")
+                        "/designer/**", "/message/**", "/work/**", "break-time/**", "work-duration/**")
                 .hasAnyAuthority("ADMIN", "OPERATOR", "DESIGNER")
                 .and()
                 .authorizeHttpRequests()
