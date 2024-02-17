@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Duration;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -42,7 +42,7 @@ public class BreakTimeService {
     public void startBreakTime(Task task, Authentication authentication) {
         userService.checkCurrentDesigner(task, authentication);
         BreakTime breakTime = new BreakTime();
-        breakTime.setStartTime(Instant.now());
+        breakTime.setStartTime(LocalDateTime.now());
         breakTime.setUser(task.getDesigner());
         breakTime.setWorkingAtTaskName(task.getTaskName());
         breakTimeRepository.save(breakTime);
@@ -53,7 +53,7 @@ public class BreakTimeService {
         List<BreakTime> breakTimeList = task.getDesigner().getBreakTimes();
         BreakTime breakTime = breakTimeList.stream().filter(BreakTime::isActive).findFirst().orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.CONFLICT, "Breaking time has not been found."));
-        breakTime.setFinishTime(Instant.now());
+        breakTime.setFinishTime(LocalDateTime.now());
         breakTime.setActive(false);
         breakTime.setBreakDuration(Duration.between(breakTime.getStartTime(), breakTime.getFinishTime()));
         breakTimeRepository.save(breakTime);
@@ -77,6 +77,7 @@ public class BreakTimeService {
             return Page.empty();
         }
     }
+
     public Page<BreakTime> getAllBreakTimesList(PageRequest pageRequest) {
         return breakTimeRepository.findAll(pageRequest);
     }

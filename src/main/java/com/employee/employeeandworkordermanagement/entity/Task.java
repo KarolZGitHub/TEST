@@ -3,13 +3,14 @@ package com.employee.employeeandworkordermanagement.entity;
 import com.employee.employeeandworkordermanagement.data.TaskStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Duration;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -33,9 +34,9 @@ public class Task {
 
     @Enumerated(EnumType.STRING)
     private TaskStatus taskStatus;
-
-    private Instant createdAt;
-    private Instant editedAt;
+    @NotNull(message = "Creation time cannot be null")
+    private LocalDateTime createdAt;
+    private LocalDateTime editedAt;
 
     @OneToOne(mappedBy = "task", cascade = CascadeType.ALL)
     private TaskFeedback taskFeedback;
@@ -46,12 +47,12 @@ public class Task {
 
     @PrePersist
     protected void onCreate() {
-        createdAt = Instant.now();
+        createdAt = LocalDateTime.now();
         workDuration = Duration.ZERO;
     }
 
     @PreUpdate
     protected void onUpdate() {
-        editedAt = Instant.now();
+        editedAt = LocalDateTime.now();
     }
 }

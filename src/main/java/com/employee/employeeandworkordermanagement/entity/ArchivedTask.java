@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -28,7 +29,7 @@ public class ArchivedTask {
     @OneToOne
     @JoinColumn(name = "designer_id")
     private User designer;
-    private Instant createdAt;
+    private LocalDateTime createdAt;
     @NotBlank(message = "Task feedback cannot be blank")
     private String taskFeedback;
     @Min(value = 1, message = "Minimum value for grade is 1.")
@@ -38,6 +39,6 @@ public class ArchivedTask {
 
     @PrePersist
     protected void onCreate() {
-        createdAt = Instant.now();
+        createdAt = LocalDateTime.now();
     }
 }

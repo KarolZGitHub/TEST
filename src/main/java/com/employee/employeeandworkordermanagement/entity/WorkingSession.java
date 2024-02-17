@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -15,9 +16,9 @@ public class WorkingSession {
     private Long id;
 
     @NotNull(message = "Creation date cannot be empty.")
-    private Instant createdAt;
-    private Instant workStarted;
-    private Instant workFinished;
+    private LocalDateTime createdAt;
+    private LocalDateTime workStarted;
+    private LocalDateTime workFinished;
     @NotNull(message = "Working time have to be set to user.")
     @ManyToOne
     private User user;
@@ -29,7 +30,7 @@ public class WorkingSession {
 
     @PrePersist
     protected void onCreate() {
-        createdAt = Instant.now();
+        createdAt = LocalDateTime.now();
         isActive = true;
     }
 }

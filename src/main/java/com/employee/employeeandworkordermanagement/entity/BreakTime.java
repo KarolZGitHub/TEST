@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.Duration;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -17,8 +17,8 @@ public class BreakTime {
     @NotNull(message = "Working information cannot be null")
     private String workingAtTaskName;
     @NotNull(message = "Start time cannot be null")
-    private Instant startTime;
-    private Instant finishTime;
+    private LocalDateTime startTime;
+    private LocalDateTime finishTime;
     @NotNull(message = "Active status cannot be null")
     private boolean isActive;
     private Duration breakDuration;
@@ -28,7 +28,7 @@ public class BreakTime {
 
     @PrePersist
     protected void onCreate() {
-        this.startTime = Instant.now();
+        this.startTime = LocalDateTime.now();
         isActive = true;
     }
 }

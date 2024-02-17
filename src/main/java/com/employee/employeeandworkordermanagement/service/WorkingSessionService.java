@@ -17,7 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -42,7 +42,7 @@ public class WorkingSessionService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "There is already active work session.");
         } else {
             WorkingSession workingSession = new WorkingSession();
-            workingSession.setWorkStarted(Instant.now());
+            workingSession.setWorkStarted(LocalDateTime.now());
             workingSession.setUser(task.getDesigner());
             workingSession.setTask(task);
             workingSessionRepository.save(workingSession);
@@ -58,8 +58,9 @@ public class WorkingSessionService {
         if (breakTimeService.checkIfBreakIsActive(task.getDesigner())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "You cannot stop your work during a break");
         }
-        workingSession.setWorkFinished(Instant.now());
+        workingSession.setWorkFinished(LocalDateTime.now());
         WorkingDuration workingDuration = new WorkingDuration();
+        workingDuration.setDate(LocalDateTime.now());
         workingDuration.setUser(task.getDesigner());
         workingDuration.setTaskName(task.getTaskName());
         workingDuration.setDuration(breakTimeService.workingDurationWithBreaks(task.getDesigner().getBreakTimes(),

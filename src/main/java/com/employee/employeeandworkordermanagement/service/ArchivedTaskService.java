@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -25,20 +26,22 @@ public class ArchivedTaskService {
     public Page<ArchivedTask> getAllArchivedTasksPage(PageRequest pageRequest) {
         return archivedTaskRepository.findAll(pageRequest);
     }
-    public void archiveTask(Long taskId, Authentication authentication){
+
+    public void archiveTask(Long taskId, Authentication authentication) {
         User sender = userService.findUserByEmail(authentication.getName());
         Task task = taskService.findById(taskId);
-        if(task.getTaskFeedback() == null){
-            throw new ResponseStatusException(HttpStatus.CONFLICT,"Task feedback has not been set.");
+        if (task.getTaskFeedback() == null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Task feedback has not been set.");
         }
         List<User> operatorsList = userService.getAllOperators();
         ArchivedTask archivedTask = new ArchivedTask();
+        archivedTask.setCreatedAt(LocalDateTime.now());
         archivedTask.setTaskName(task.getTaskName());
         archivedTask.setTaskFeedback(task.getTaskFeedback().getFeedback());
         archivedTask.setDesigner(task.getDesigner());
         archivedTask.setDescription(task.getDescription());
         archivedTask.setGrade(task.getTaskFeedback().getGrade());
-        messageService.notifyDesignerThatTaskIsArchived(task.getDesigner(),sender,task);
+        messageService.notifyDesignerThatTaskIsArchived(task.getDesigner(), sender, task);
         operatorsList.forEach(operator -> messageService.notifyOperatorThatTaskIsArchived(operator, sender, task));
         //TODO:add total working time
         archivedTaskRepository.save(archivedTask);

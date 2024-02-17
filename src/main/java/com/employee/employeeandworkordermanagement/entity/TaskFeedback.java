@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -27,11 +27,11 @@ public class TaskFeedback {
     @OneToOne
     @JoinColumn(name = "task_id")
     private Task task;
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
     @PrePersist
     protected void onCreate() {
         isSet = true;
-        createdAt = Instant.now();
+        createdAt = LocalDateTime.now();
     }
 }

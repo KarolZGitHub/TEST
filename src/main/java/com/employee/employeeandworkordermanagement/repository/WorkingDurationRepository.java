@@ -11,7 +11,6 @@ import java.util.List;
 
 @Repository
 public interface WorkingDurationRepository extends JpaRepository<WorkingDuration, Long> {
-    List<WorkingDuration> findAllByUser(User user);
 
     Page<WorkingDuration> findAllByUser(User user, Pageable pageable);
 }
