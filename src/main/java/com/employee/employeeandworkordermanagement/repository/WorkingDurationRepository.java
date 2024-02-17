@@ -7,10 +7,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Repository
 public interface WorkingDurationRepository extends JpaRepository<WorkingDuration, Long> {
 
     Page<WorkingDuration> findAllByUser(User user, Pageable pageable);
+
+    Page<WorkingDuration> findAllByUserAndDateBetween(User user, LocalDateTime startDate, LocalDateTime endDate,
+                                                      Pageable pageable);
+
+    Page<WorkingDuration> findAllByDateBetween(LocalDateTime startDate, LocalDateTime endDate,
+                                               Pageable pageable);
 }

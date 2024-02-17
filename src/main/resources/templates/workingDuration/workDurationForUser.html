@@ -17,6 +17,17 @@
             <button type="submit" class="btn btn-secondary" name="sortField" value="date">Sort by Date</button>
         </div>
     </form>
+    <form th:action="@{'/work-duration/duration-list'}" method="get" id="dateRangeForm">
+        <div class="form-group">
+            <label for="startDate">Date from:</label>
+            <input type="date" id="startDate" name="startDate" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label for="endDate">Date to:</label>
+            <input type="date" id="endDate" name="endDate" class="form-control"/>
+        </div>
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
     <table class="table table-bordered">
         <thead class="thead-light">
         <tr>
@@ -39,7 +50,7 @@
                th:href="@{'/work-duration/duration-list?page=' + ${workingDurationPage.number - 1} + '&sortField=' + ${sortField}}">Previous</a>
         </li>
         <li th:each="i : ${#numbers.sequence(0, workingDurationPage.totalPages - 1)}">
-            <a th:href="@{'/work-duration/duration-list?page=?page=' + ${i} + '&sortField=' + ${sortField}}" th:text="${i + 1}"></a>
+            <a th:href="@{'/work-duration/duration-list?page=' + ${i} + '&sortField=' + ${sortField}}" th:text="${i + 1}"></a>
         </li>
         <li th:classappend="${workingDurationPage != null && workingDurationPage.hasNext() ? '' : 'disabled'}">
             <a th:if="${workingDurationPage != null && workingDurationPage.hasNext()}"
