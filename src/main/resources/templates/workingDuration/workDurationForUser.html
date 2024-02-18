@@ -32,6 +32,7 @@
         <thead class="thead-light">
         <tr>
             <th>ID</th>
+            <th>Date</th>
             <th>Task</th>
             <th>Duration</th>
         </tr>
@@ -39,8 +40,9 @@
         <tbody>
         <tr th:each="workingDuration : ${workingDurationPage.content}">
             <td th:text="${workingDuration.id}"></td>
+            <td th:text="${#temporals.format(workingDuration.date, 'yyyy-MM-dd HH:mm:ss')}"></td>
             <td th:text="${workingDuration.taskName}"></td>
-            <td th:text="${#dates.format(workingDuration.duration.toMinutes(), 'HH:mm')}"></td>
+            <td th:text="${workingDuration.duration.toHours()} + 'h ' + ${workingDuration.duration.toMinutesPart()} + 'min'"></td>
         </tr>
         </tbody>
     </table>

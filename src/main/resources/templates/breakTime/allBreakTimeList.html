@@ -45,7 +45,7 @@
             <td th:text="${#temporals.format(breakTime.startTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
             <td th:text="${breakTime.finishTime != null ? #temporals.format(breakTime.finishTime, 'yyyy-MM-dd HH:mm:ss') : 'N/A'}"></td>
             <td th:text="${breakTime.isActive ? 'Active' : 'Inactive'}"></td>
-            <td th:text="${breakTime.breakDuration != null ? #dates.format(breakTime.breakDuration.toMinutes(), 'HH:mm') : 'N/A'}"></td>
+            <td th:text="${breakTime.breakDuration != null ? breakTime.breakDuration.toMinutes() + ' min' : 'N/A'}"></td>
             <td th:text="${breakTime.user != null ? breakTime.user.getFirstName() + ' ' + breakTime.user.getLastName() : 'N/A'}"></td>
         </tr>
         </tbody>
