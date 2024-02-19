@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,6 +22,7 @@ public class WorkingSession {
     @NotNull(message = "Working time have to be set to user.")
     @ManyToOne
     private User user;
+    private Duration duration;
     @ManyToOne
     @JoinColumn(name = "task_id")
     private Task task;

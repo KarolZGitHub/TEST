@@ -51,18 +51,6 @@ public class WorkingSessionController {
         return "workingSession/workingSessionForUser";
     }
 
-    @GetMapping("/all-work-list")
-    public String showAllWorkInformation(@RequestParam(required = false, defaultValue = "0") int page,
-                                         @RequestParam(required = false, defaultValue = "asc") String direction,
-                                         @RequestParam(required = false, defaultValue = "id") String sortField,
-                                         Model model
-    ) {
-        model.addAttribute("sortField", sortField);
-        Page<WorkingSession> workingSessionPage = workingSessionService.getAllSortedWorkingTimePage(page, direction, sortField);
-        model.addAttribute("workingSessionPage", workingSessionPage);
-        return "workingSession/workingSessionList";
-    }
-
     @GetMapping("finish-work")
     public String handleStopWork(@RequestParam(name = "id") Long id, Authentication authentication) {
         Task task = taskService.findById(id);

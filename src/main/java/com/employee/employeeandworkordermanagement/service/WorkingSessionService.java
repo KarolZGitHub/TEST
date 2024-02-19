@@ -8,17 +8,16 @@ import com.employee.employeeandworkordermanagement.repository.TaskRepository;
 import com.employee.employeeandworkordermanagement.repository.WorkingDurationRepository;
 import com.employee.employeeandworkordermanagement.repository.WorkingSessionRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -59,6 +58,7 @@ public class WorkingSessionService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "You cannot stop your work during a break");
         }
         workingSession.setWorkFinished(LocalDateTime.now());
+        workingSession.setDuration(Duration.between(workingSession.getWorkStarted(), workingSession.getWorkFinished()));
         WorkingDuration workingDuration = new WorkingDuration();
         workingDuration.setDate(LocalDateTime.now());
         workingDuration.setUser(task.getDesigner());
@@ -88,4 +88,16 @@ public class WorkingSessionService {
         Pageable pageable = PageRequest.of(page, 50, sort);
         return workingSessionRepository.findAll(pageable);
     }
+
+    public Page<WorkingSession> findAnomalousWorkingSessions(User user, Pageable pageable) {
+        Page<WorkingSession> sessions = workingSessionRepository.findAllByUser(user, pageable);
+
+        List<WorkingSession> filteredSessions = sessions.getContent().stream()
+                .filter(session -> session.getDuration().compareTo(Duration.ofHours(8)) > 0 ||
+                        session.getDuration().compareTo(Duration.ofMinutes(5)) < 0)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(filteredSessions, pageable, sessions.getTotalElements());
+    }
+
 }

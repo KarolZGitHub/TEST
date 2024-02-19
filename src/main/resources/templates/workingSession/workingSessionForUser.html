@@ -22,6 +22,7 @@
             <th>ID</th>
             <th>Work Started</th>
             <th>Work Finished</th>
+            <th>Duration</th>
             <th>Task</th>
             <th>Active Status</th>
         </tr>
@@ -31,6 +32,7 @@
             <td th:text="${workingSession.id}"></td>
             <td th:text="${#temporals.format(workingSession.workStarted, 'yyyy-MM-dd HH:mm:ss')} ?: '-'"></td>
             <td th:text="${#temporals.format(workingSession.workFinished, 'yyyy-MM-dd HH:mm:ss')} ?: '-'"></td>
+            <td th:text="${workingSession.duration.toHours()} + 'h ' + ${workingSession.duration.toMinutesPart()} + 'min'"></td>
             <td th:text="${workingSession.task.taskName}"></td>
             <td th:text="${workingSession.isActive ? 'Active' : 'Inactive'}"></td>
         </tr>
