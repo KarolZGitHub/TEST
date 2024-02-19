@@ -1,11 +1,14 @@
 package com.employee.employeeandworkordermanagement.controller;
 
 import com.employee.employeeandworkordermanagement.dto.UserDTO;
+import com.employee.employeeandworkordermanagement.entity.User;
 import com.employee.employeeandworkordermanagement.entity.WorkingSession;
 import com.employee.employeeandworkordermanagement.service.UserService;
 import com.employee.employeeandworkordermanagement.service.WorkingSessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,5 +43,30 @@ public class WorkingSessionManageController {
         Page<WorkingSession> workingSessionPage = workingSessionService.getAllSortedWorkingTimePage(page, direction, sortField);
         model.addAttribute("workingSessionPage", workingSessionPage);
         return "workingSession/workingSessionList";
+    }
+
+    @GetMapping("/anomalies")
+    public String showAllDesigners(@RequestParam(required = false, defaultValue = "0") int page,
+                                   @RequestParam(required = false, defaultValue = "asc") String direction,
+                                   @RequestParam(required = false, defaultValue = "id") String sortField,
+                                   Model model) {
+        Sort sort = Sort.by(Sort.Direction.fromString(direction), sortField);
+        Page<User> designerPage = userService.designerPage(PageRequest.of(page, 50, sort));
+        model.addAttribute("designerPage", designerPage);
+        return "workingSession/workingSessionAnomalies";
+    }
+
+    @GetMapping("/anomaly")
+    public String showAnomaly(@RequestParam(required = false, defaultValue = "0") Long id,
+                              @RequestParam(required = false, defaultValue = "0") int page,
+                              @RequestParam(required = false, defaultValue = "asc") String direction,
+                              @RequestParam(required = false, defaultValue = "id") String sortField,
+                              Model model) {
+        User user = userService.findById(id);
+        Sort sort = Sort.by(Sort.Direction.fromString(direction), sortField);
+        Page<WorkingSession> anomalyPage = workingSessionService.findAnomalousWorkingSessions(user, PageRequest.of(page,
+                50, sort));
+        model.addAttribute("designerPage", anomalyPage);
+        return "workingSession/singleAnomaly";
     }
 }

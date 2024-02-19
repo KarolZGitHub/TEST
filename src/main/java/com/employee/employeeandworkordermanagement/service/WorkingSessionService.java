@@ -99,5 +99,4 @@ public class WorkingSessionService {
 
         return new PageImpl<>(filteredSessions, pageable, sessions.getTotalElements());
     }
-
 }
