@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head th:insert="~{header}">
-    <title>All Designers</title>
+    <title>Working Time Issues</title>
 </head>
 <body>
-<h1>Designers List</h1>
-
 <div class="container">
     <h1 class="mt-5">Designers List</h1>
     <div class="row">
@@ -28,7 +26,10 @@
         <tr th:each="designer : ${designerPage.content}">
             <td th:text="${designer.firstName}"></td>
             <td th:text="${designer.lastName}"></td>
-            <td th:href="@{'/work-manage/anomaly?id=' + ${designer.id}}" class="btn btn-primary">Show Anomalies</td>
+            <td>
+                <a th:href="@{'/work-manage/user-anomaly?id=' + ${designer.id}}" class="btn btn-primary">Working
+                    Session</a>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -38,7 +39,7 @@
             <ul class="pagination">
                 <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, designerPage.totalPages - 1)}">
                     <a class="page-link"
-                       th:href="@{'/work-manage/anomalies?page=' + ${pageNumber} + '&size=' + ${designerPage.size}}"
+                       th:href="@{'/work-manage/check-anomalies?page=' + ${pageNumber} + '&size=' + ${designerPage.size}}"
                        th:text="${pageNumber + 1}"></a>
                 </li>
             </ul>

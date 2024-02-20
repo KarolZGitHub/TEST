@@ -9,6 +9,8 @@ import com.employee.employeeandworkordermanagement.service.UserService;
 import com.employee.employeeandworkordermanagement.service.WorkingSessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -63,5 +65,18 @@ public class WorkingSessionController {
         Task task = taskService.findById(id);
         workingSessionService.createWorkingSession(task, authentication);
         return "redirect:/task/your-task";
+    }
+
+    @GetMapping("/user-anomalies")
+    public String showAnomaly(@RequestParam(required = false, defaultValue = "0") int page,
+                              @RequestParam(required = false, defaultValue = "asc") String direction,
+                              @RequestParam(required = false, defaultValue = "id") String sortField,
+                              Model model, Authentication authentication) {
+        User user = userService.findUserByEmail(authentication.getName());
+        Sort sort = Sort.by(Sort.Direction.fromString(direction), sortField);
+        Page<WorkingSession> anomalyPage = workingSessionService.findAnomalousWorkingSessions(user, PageRequest.of(page,
+                50, sort));
+        model.addAttribute("anomalyPage", anomalyPage);
+        return "workingSession/userAnomaly";
     }
 }

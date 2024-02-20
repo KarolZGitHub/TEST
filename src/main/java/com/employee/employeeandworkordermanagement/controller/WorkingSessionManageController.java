@@ -53,10 +53,10 @@ public class WorkingSessionManageController {
         Sort sort = Sort.by(Sort.Direction.fromString(direction), sortField);
         Page<User> designerPage = userService.designerPage(PageRequest.of(page, 50, sort));
         model.addAttribute("designerPage", designerPage);
-        return "workingSession/workingSessionAnomalies";
+        return "workingSession/anomalies";
     }
 
-    @GetMapping("/anomaly")
+    @GetMapping("/check-anomalies")
     public String showAnomaly(@RequestParam(required = false, defaultValue = "0") Long id,
                               @RequestParam(required = false, defaultValue = "0") int page,
                               @RequestParam(required = false, defaultValue = "asc") String direction,
@@ -67,6 +67,6 @@ public class WorkingSessionManageController {
         Page<WorkingSession> anomalyPage = workingSessionService.findAnomalousWorkingSessions(user, PageRequest.of(page,
                 50, sort));
         model.addAttribute("designerPage", anomalyPage);
-        return "workingSession/singleAnomaly";
+        return "workingSession/userAnomaly";
     }
 }
