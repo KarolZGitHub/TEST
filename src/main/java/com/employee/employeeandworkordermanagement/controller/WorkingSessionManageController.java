@@ -57,7 +57,7 @@ public class WorkingSessionManageController {
     }
 
     @GetMapping("/check-anomalies")
-    public String showAnomaly(@RequestParam(required = false, defaultValue = "0") Long id,
+    public String showDesigners(@RequestParam(required = false, defaultValue = "0") Long id,
                               @RequestParam(required = false, defaultValue = "0") int page,
                               @RequestParam(required = false, defaultValue = "asc") String direction,
                               @RequestParam(required = false, defaultValue = "id") String sortField,
@@ -71,7 +71,7 @@ public class WorkingSessionManageController {
     }
 
     @GetMapping("/user-anomalies")
-    public String showAnomaly(@RequestParam(name = "id") Long id,
+    public String showAnomalies(@RequestParam(name = "id") Long id,
                               @RequestParam(required = false, defaultValue = "0") int page,
                               @RequestParam(required = false, defaultValue = "asc") String direction,
                               @RequestParam(required = false, defaultValue = "id") String sortField,
