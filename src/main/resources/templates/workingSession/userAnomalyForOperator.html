@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{header.html}">
+    <title>Working Time Issues</title>
+</head>
+<body>
+<div class="container">
+    <!-- Content -->
+    <h2>Working Time List</h2>
+    <form th:action="@{'/work-manage/user-anomalies?id=' + id}" method="get" id="sortForm">
+        <div class="btn-group" role="group" aria-label="Sort by">
+            <button type="submit" class="btn btn-secondary" name="sortField" value="id">Sort by ID</button>
+            <button type="submit" class="btn btn-secondary" name="sortField" value="createdAt">Sort by Date</button>
+            <button type="submit" class="btn btn-secondary" name="sortField"
+                    value="task">Sort by Task
+            </button>
+        </div>
+    </form>
+    <table class="table table-bordered">
+        <thead class="thead-light">
+        <tr>
+            <th>ID</th>
+            <th>Work Started</th>
+            <th>Work Finished</th>
+            <th>Duration</th>
+            <th>Task</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="workingSession : ${anomalyPage.content}">
+            <td th:text="${workingSession.id}"></td>
+            <td th:text="${#temporals.format(workingSession.workStarted, 'yyyy-MM-dd HH:mm:ss')} ?: '-'"></td>
+            <td th:text="${#temporals.format(workingSession.workFinished, 'yyyy-MM-dd HH:mm:ss')} ?: '-'"></td>
+            <td th:text="${workingSession.duration.toHours()} + 'h ' + ${workingSession.duration.toMinutesPart()}
+            + 'min'"></td>
+            <td th:text="${workingSession.task.taskName}"></td>
+            <!-- Add action to report a mistake -->
+        </tr>
+        </tbody>
+    </table>
+    <ul class="pagination">
+        <li th:classappend="${anomalyPage != null && anomalyPage.hasPrevious() ? '' : 'disabled'}">
+            <a th:if="${anomalyPage != null && anomalyPage.hasPrevious()}"
+               th:href="@{'/work-manage/user-anomalies?id=' + id + '?page=' + ${anomalyPage.number - 1} + '&sortField='
+               + ${sortField}}">Previous</a>
+        </li>
+        <li th:each="i : ${#numbers.sequence(0, anomalyPage.totalPages - 1)}">
+            <a th:href="@{'/work-manage/user-anomalies?id=' + id + '?page=' + ${i} + '&sortField=' + ${sortField}}"
+               th:text="${i + 1}"></a>
+        </li>
+        <li th:classappend="${anomalyPage != null && anomalyPage.hasNext() ? '' : 'disabled'}">
+            <a th:if="${anomalyPage != null && anomalyPage.hasNext()}"
+               th:href="@{'/work-manage/user-anomalies?id=' + id + '?page=' + ${anomalyPage.number + 1} + '&sortField='
+               + ${sortField}}">Next</a>
+        </li>
+        <li th:classappend="${anomalyPage != null && anomalyPage.isLast() ? 'disabled' : ''}">
+            <a th:if="${anomalyPage != null && !anomalyPage.isLast()}"
+               th:href="@{'/work-manage/user-anomalies?id=' + id + '?page=' + ${anomalyPage.totalPages - 1} +
+               '&sortField=' + ${sortField}}">Last</a>
+        </li>
+    </ul>
+</div>
+<script src="/js/formatTime.js"></script>
+<script src="/js/CurrentWorkingTime.js"></script>
+<script src="/js/OverallWorkingTime.js"></script>
+</body>
+<!-- Footer -->
+<div th:insert="~{footer}"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</html>
