@@ -75,7 +75,7 @@ public class WorkingSessionManageController {
                               @RequestParam(required = false, defaultValue = "0") int page,
                               @RequestParam(required = false, defaultValue = "asc") String direction,
                               @RequestParam(required = false, defaultValue = "id") String sortField,
-                              Model model, Authentication authentication) {
+                              Model model) {
         User user = userService.findById(id);
         Sort sort = Sort.by(Sort.Direction.fromString(direction), sortField);
         Page<WorkingSession> anomalyPage = workingSessionService.findAnomalousWorkingSessions(user, PageRequest.of(page,

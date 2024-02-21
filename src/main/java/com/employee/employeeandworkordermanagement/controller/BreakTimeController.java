@@ -59,4 +59,5 @@ public class BreakTimeController {
         model.addAttribute("breakTimes", breakTimes);
         return "breakTime/allBreakTimeList";
     }
+
 }

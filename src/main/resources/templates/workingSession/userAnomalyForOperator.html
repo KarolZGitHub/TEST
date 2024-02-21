@@ -7,7 +7,8 @@
 <div class="container">
     <!-- Content -->
     <h2>Working Time List</h2>
-    <form th:action="@{'/work-manage/user-anomalies?id=' + id}" method="get" id="sortForm">
+    <form th:action="@{'/work-manage/user-anomalies'}" method="get" id="sortForm">
+        <input type="hidden" name="id" th:value="${id}" />
         <div class="btn-group" role="group" aria-label="Sort by">
             <button type="submit" class="btn btn-secondary" name="sortField" value="id">Sort by ID</button>
             <button type="submit" class="btn btn-secondary" name="sortField" value="createdAt">Sort by Date</button>
@@ -42,22 +43,19 @@
     <ul class="pagination">
         <li th:classappend="${anomalyPage != null && anomalyPage.hasPrevious() ? '' : 'disabled'}">
             <a th:if="${anomalyPage != null && anomalyPage.hasPrevious()}"
-               th:href="@{'/work-manage/user-anomalies?id=' + id + '?page=' + ${anomalyPage.number - 1} + '&sortField='
-               + ${sortField}}">Previous</a>
+               th:href="@{'/work-manage/user-anomalies?id=' + ${id} + '&page=' + ${anomalyPage.number - 1} + '&sortField=' + ${sortField}}">Previous</a>
         </li>
         <li th:each="i : ${#numbers.sequence(0, anomalyPage.totalPages - 1)}">
-            <a th:href="@{'/work-manage/user-anomalies?id=' + id + '?page=' + ${i} + '&sortField=' + ${sortField}}"
+            <a th:href="@{'/work-manage/user-anomalies?id=' + ${id} + '&page=' + ${i} + '&sortField=' + ${sortField}}"
                th:text="${i + 1}"></a>
         </li>
         <li th:classappend="${anomalyPage != null && anomalyPage.hasNext() ? '' : 'disabled'}">
             <a th:if="${anomalyPage != null && anomalyPage.hasNext()}"
-               th:href="@{'/work-manage/user-anomalies?id=' + id + '?page=' + ${anomalyPage.number + 1} + '&sortField='
-               + ${sortField}}">Next</a>
+               th:href="@{'/work-manage/user-anomalies?id=' + ${id} + '&page=' + ${anomalyPage.number + 1} + '&sortField=' + ${sortField}}">Next</a>
         </li>
         <li th:classappend="${anomalyPage != null && anomalyPage.isLast() ? 'disabled' : ''}">
             <a th:if="${anomalyPage != null && !anomalyPage.isLast()}"
-               th:href="@{'/work-manage/user-anomalies?id=' + id + '?page=' + ${anomalyPage.totalPages - 1} +
-               '&sortField=' + ${sortField}}">Last</a>
+               th:href="@{'/work-manage/user-anomalies?id=' + ${id} + '&page=' + ${anomalyPage.totalPages - 1} + '&sortField=' + ${sortField}}">Last</a>
         </li>
     </ul>
 </div>

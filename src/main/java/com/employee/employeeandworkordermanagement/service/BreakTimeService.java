@@ -7,7 +7,9 @@ import com.employee.employeeandworkordermanagement.entity.WorkingSession;
 import com.employee.employeeandworkordermanagement.repository.BreakTimeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -80,5 +83,13 @@ public class BreakTimeService {
 
     public Page<BreakTime> getAllBreakTimesList(PageRequest pageRequest) {
         return breakTimeRepository.findAll(pageRequest);
+    }
+
+    public Page<BreakTime> findAnomalousBreakTimes(User user, Pageable pageable) {
+        Page<BreakTime> breakTimes = breakTimeRepository.findAllByUser(user, pageable);
+        List<BreakTime> filteredBreakTimes = breakTimes.getContent().stream()
+                .filter(breakTime -> breakTime.getBreakDuration().compareTo(Duration.ofMinutes(20)) > 0 ||
+                        breakTime.getBreakDuration().compareTo(Duration.ofMinutes(1)) < 0).collect(Collectors.toList());
+        return new PageImpl<>(filteredBreakTimes, pageable, breakTimes.getTotalElements());
     }
 }
