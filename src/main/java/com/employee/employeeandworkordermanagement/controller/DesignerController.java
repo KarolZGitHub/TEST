@@ -53,6 +53,7 @@ public class DesignerController {
         Sort sort = Sort.by(Sort.Direction.fromString(direction), sortField);
         Page<User> designerPage = userService.designerPage(PageRequest.of(page, 50, sort));
         model.addAttribute("designerPage", designerPage);
+        model.addAttribute("sortField", sortField);
         return "designer/designerList";
     }
 }

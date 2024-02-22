@@ -38,23 +38,17 @@
         </tr>
         </tbody>
     </table>
-    <ul class="pagination">
-        <li th:classappend="${anomalyPage != null && anomalyPage.hasPrevious() ? '' : 'disabled'}">
-            <a th:if="${anomalyPage != null && anomalyPage.hasPrevious()}"
-               th:href="@{'/work/user-anomalies?page=' + ${anomalyPage.number - 1} + '&sortField=' + ${sortField}}">Previous</a>
-        </li>
-        <li th:each="i : ${#numbers.sequence(0, anomalyPage.totalPages - 1)}">
-            <a th:href="@{'/work/user-anomalies?page=' + ${i} + '&sortField=' + ${sortField}}" th:text="${i + 1}"></a>
-        </li>
-        <li th:classappend="${anomalyPage != null && anomalyPage.hasNext() ? '' : 'disabled'}">
-            <a th:if="${anomalyPage != null && anomalyPage.hasNext()}"
-               th:href="@{'/work/user-anomalies?page=' + ${anomalyPage.number + 1} + '&sortField=' + ${sortField}}">Next</a>
-        </li>
-        <li th:classappend="${anomalyPage != null && anomalyPage.isLast() ? 'disabled' : ''}">
-            <a th:if="${anomalyPage != null && !anomalyPage.isLast()}"
-               th:href="@{'/work/user-anomalies?page=' + ${anomalyPage.totalPages - 1} + '&sortField=' + ${sortField}}">Last</a>
-        </li>
-    </ul>
+    <div class=" mt-3">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, anomalyPage.totalPages - 1)}">
+                    <a class="page-link"
+                       th:href="@{'/work/user-anomalies?page=' + ${pageNumber} + '&sortField=' + ${sortField}}"
+                       th:text="${pageNumber + 1}"></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </div>
 <script src="/js/formatTime.js"></script>
 <script src="/js/CurrentWorkingTime.js"></script>

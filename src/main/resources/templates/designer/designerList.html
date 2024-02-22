@@ -36,7 +36,7 @@
             <ul class="pagination">
                 <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, designerPage.totalPages - 1)}">
                     <a class="page-link"
-                       th:href="@{'/designer/all-designers?page=' + ${pageNumber} + '&size=' + ${designerPage.size}}"
+                       th:href="@{'/designer/all-designers?page=' + ${pageNumber} + '&sortField=' + ${sortField}}"
                        th:text="${pageNumber + 1}"></a>
                 </li>
             </ul>

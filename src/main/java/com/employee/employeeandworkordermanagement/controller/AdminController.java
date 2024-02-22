@@ -43,6 +43,7 @@ public class AdminController {
         Sort sort = Sort.by(Sort.Direction.fromString(direction), sortField);
         Page<User> userPage = userService.getAllUsers(PageRequest.of(page, 50,sort));
         model.addAttribute("userPage", userPage);
+        model.addAttribute("sortField", sortField);
         return "admin/allUsers";
     }
 

@@ -45,6 +45,7 @@ public class BreakTimeController {
         Sort sort = Sort.by(Sort.Direction.fromString(direction), sortField);
         Page<BreakTime> breakTimes = breakTimeService.getBreakTimesForUser(authentication, PageRequest.of(page, 50, sort));
         model.addAttribute("breakTimes", breakTimes);
+        model.addAttribute("sortField", sortField);
         return "breakTime/breakTimeListForUser";
     }
 
@@ -57,6 +58,7 @@ public class BreakTimeController {
         Sort sort = Sort.by(Sort.Direction.fromString(direction), sortField);
         Page<BreakTime> breakTimes = breakTimeService.getAllBreakTimesList(PageRequest.of(page, 50, sort));
         model.addAttribute("breakTimes", breakTimes);
+        model.addAttribute("sortField", sortField);
         return "breakTime/allBreakTimeList";
     }
 

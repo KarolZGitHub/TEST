@@ -50,6 +50,7 @@ public class WorkingSessionController {
         model.addAttribute("sortField", sortField);
         Page<WorkingSession> workingSessionPage = workingSessionService.getUserSortedWorkingTimePage(page, direction, sortField, theUser);
         model.addAttribute("workingSessionPage", workingSessionPage);
+        model.addAttribute("sortField", sortField);
         return "workingSession/workingSessionForUser";
     }
 
@@ -77,6 +78,7 @@ public class WorkingSessionController {
         Page<WorkingSession> anomalyPage = workingSessionService.findAnomalousWorkingSessions(user, PageRequest.of(page,
                 50, sort));
         model.addAttribute("anomalyPage", anomalyPage);
+        model.addAttribute("sortField", sortField);
         return "workingSession/userAnomaly";
     }
 }

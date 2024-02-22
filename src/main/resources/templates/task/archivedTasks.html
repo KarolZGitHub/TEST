@@ -54,7 +54,7 @@
             <ul class="pagination">
                 <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, archivedTaskPage.totalPages - 1)}">
                     <a class="page-link"
-                       th:href="@{'/task/archived-tasks?page=' + ${pageNumber} + '&sortField?' + ${sortField}}"
+                       th:href="@{'/task/archived-tasks?page=' + ${pageNumber} + '&sortField=' + ${sortField}}"
                        th:text="${pageNumber + 1}"></a>
                 </li>
             </ul>

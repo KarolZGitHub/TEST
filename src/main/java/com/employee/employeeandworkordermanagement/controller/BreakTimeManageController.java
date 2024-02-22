@@ -32,6 +32,7 @@ public class BreakTimeManageController {
         Page<BreakTime> anomalyPage = breakTimeService.findAnomalousBreakTimes(user, PageRequest.of(page,
                 50, sort));
         model.addAttribute("anomalyPage", anomalyPage);
+        model.addAttribute("sortField", sortField);
         return "breakTime/breakTimeAnomaliesForUser";
     }
 }

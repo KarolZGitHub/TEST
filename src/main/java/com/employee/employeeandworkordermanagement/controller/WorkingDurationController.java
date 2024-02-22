@@ -42,6 +42,7 @@ public class WorkingDurationController {
         Page<WorkingDuration> workingDurationPage = workingDurationService.getUserSortedWorkingTimePage(page, direction,
                 sortField, theUser, startDate, endDate);
         model.addAttribute("workingDurationPage", workingDurationPage);
+        model.addAttribute("sortField", sortField);
         return "workingDuration/workDurationForUser";
     }
 
@@ -59,6 +60,7 @@ public class WorkingDurationController {
         Page<WorkingDuration> workingDurationPage = workingDurationService.getAllSortedWorkingTimePage(page, direction,
                 sortField, startDate, endDate);
         model.addAttribute("workingDurationPage", workingDurationPage);
+        model.addAttribute("sortField", sortField);
         return "workingDuration/allWorkDurations";
     }
 }

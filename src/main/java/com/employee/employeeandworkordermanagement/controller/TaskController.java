@@ -61,6 +61,7 @@ public class TaskController {
         Sort sort = Sort.by(Sort.Direction.fromString(direction), sortField);
         Page<Task> taskPage = taskService.getAllTasksPage(PageRequest.of(page, 50, sort));
         model.addAttribute("taskPage", taskPage);
+        model.addAttribute("sortField", sortField);
         return "task/tasks";
     }
 
@@ -91,6 +92,7 @@ public class TaskController {
         Page<ArchivedTask> archivedTaskPage = archivedTaskService.getAllArchivedTasksPage(PageRequest.of(
                 page, 50, sort));
         model.addAttribute("archivedTaskPage", archivedTaskPage);
+        model.addAttribute("sortField", sortField);
         return "task/archivedTasks";
     }
 }
