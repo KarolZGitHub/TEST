@@ -57,22 +57,6 @@ public class WorkingSessionManageController {
         model.addAttribute("sortField", sortField);
         return "workingSession/anomalies";
     }
-
-    @GetMapping("/check-anomalies")
-    public String showDesigners(@RequestParam(required = false, defaultValue = "0") Long id,
-                                @RequestParam(required = false, defaultValue = "0") int page,
-                                @RequestParam(required = false, defaultValue = "asc") String direction,
-                                @RequestParam(required = false, defaultValue = "id") String sortField,
-                                Model model) {
-        User user = userService.findById(id);
-        Sort sort = Sort.by(Sort.Direction.fromString(direction), sortField);
-        Page<WorkingSession> anomalyPage = workingSessionService.findAnomalousWorkingSessions(user, PageRequest.of(page,
-                50, sort));
-        model.addAttribute("designerPage", anomalyPage);
-        model.addAttribute("sortField", sortField);
-        return "workingSession/userAnomaly";
-    }
-
     @GetMapping("/user-anomalies")
     public String showAnomalies(@RequestParam(name = "id") Long id,
                                 @RequestParam(required = false, defaultValue = "0") int page,

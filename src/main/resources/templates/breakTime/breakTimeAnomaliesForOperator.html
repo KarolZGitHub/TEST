@@ -6,7 +6,8 @@
 <body>
 <div class="container mt-5">
     <h2>Break Times Issues</h2>
-    <form th:action="@{'/break-time/break-user-anomalies'}" method="get" id="sortForm">
+    <form th:action="@{'/break-time-manage/break-user-anomalies'}" method="get" id="sortForm">
+        <input type="hidden" name="id" th:value="${id}" />
         <div class="btn-group" role="group" aria-label="Sort by">
             <button type="submit" class="btn btn-secondary" name="sortField" value="id">Sort by ID</button>
             <button type="submit" class="btn btn-secondary" name="sortField" value="startTime">Sort by Start</button>
@@ -43,23 +44,23 @@
             <td th:text="${breakTime.finishTime != null ? #temporals.format(breakTime.finishTime, 'yyyy-MM-dd HH:mm:ss') : 'N/A'}"></td>
             <td th:text="${breakTime.isActive ? 'Active' : 'Inactive'}"></td>
             <td th:text="${breakTime.breakDuration != null ? breakTime.breakDuration.toMinutes() + ' min' : 'N/A'}"></td>
-            <!-- TODO: report action -->
+            <!-- TODO: operator action -->
         </tr>
         </tbody>
     </table>
     <ul class="pagination justify-content-center">
         <li th:class="${anomalyPage.first} ? 'page-item disabled' : 'page-item'">
-            <a class="page-link" th:href="@{${'/break-time/break-anomalies'} + '?page=0&sortField=' + ${sortField}}">First</a>
+            <a class="page-link" th:href="@{${'/break-time-manage/break-user-anomalies?id=' + id} + '&page=0&sortField=' + ${sortField}}">First</a>
         </li>
         <li th:each="i : ${#numbers.sequence(0, anomalyPage.totalPages - 1)}"
             th:class="${anomalyPage.number == i} ? 'page-item active' : 'page-item'">
             <a class="page-link"
-               th:href="@{${'/break-time/break-anomalies'} + '?page=' + ${i} + '&sortField=' + ${sortField}}"
+               th:href="@{${'/break-time-manage/break-user-anomalies?id=' + id} + '&page=' + ${i} + '&sortField=' + ${sortField}}"
                th:text="${i + 1}"></a>
         </li>
         <li th:class="${anomalyPage.last} ? 'page-item disabled' : 'page-item'">
             <a class="page-link"
-               th:href="@{${'/break-time/break-anomalies'} + '?page=' + ${anomalyPage.totalPages - 1} + '&sortField=' + ${sortField}}">Last</a>
+               th:href="@{${'/break-time-manage/break-user-anomalies?id=' + id} + '&page=' + ${anomalyPage.totalPages - 1} + '&sortField=' + ${sortField}}">Last</a>
         </li>
     </ul>
 </div>

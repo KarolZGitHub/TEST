@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .hasAuthority("ADMIN")
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/edit/**", "/work-manage/**")
+                .requestMatchers("/edit/**", "/work-manage/**", "/break-time-manage/**")
                 .hasAnyAuthority("ADMIN", "OPERATOR")
                 .and()
                 .formLogin()
