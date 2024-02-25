@@ -15,7 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -98,5 +100,37 @@ public class WorkingSessionService {
                 .collect(Collectors.toList());
 
         return new PageImpl<>(filteredSessions, pageable, sessions.getTotalElements());
+    }
+
+    public Page<LocalDate> findDaysWithNoInserts(User user, LocalDateTime fromDate, LocalDateTime toDate,
+                                                 Pageable pageable) {
+        List<LocalDate> daysWithNoInserts = new ArrayList<>();
+
+        LocalDateTime currentDay = fromDate;
+        while (!currentDay.isAfter(toDate)) {
+            Page<WorkingSession> workingSessions = workingSessionRepository.findAllByUserAndCreatedAtBetween(user,
+                    currentDay.withHour(0).withMinute(0).withSecond(0),
+                    currentDay.withHour(23).withMinute(59).withSecond(59), pageable);
+            if (workingSessions.isEmpty()) {
+                daysWithNoInserts.add(currentDay.toLocalDate());
+            }
+            currentDay = currentDay.plusDays(1);
+        }
+
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+        List<LocalDate> pageContent = getPageContent(daysWithNoInserts, startItem, pageSize);
+
+        return new PageImpl<>(pageContent, pageable, daysWithNoInserts.size());
+    }
+
+    private List<LocalDate> getPageContent(List<LocalDate> list, int startItem, int pageSize) {
+        int size = list.size();
+        int toIndex = Math.min(startItem + pageSize, size);
+        if (startItem >= size || startItem < 0 || toIndex < 0) {
+            return new ArrayList<>();
+        }
+        return list.subList(startItem, toIndex);
     }
 }

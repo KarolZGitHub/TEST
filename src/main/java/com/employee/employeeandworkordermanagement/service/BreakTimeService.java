@@ -92,12 +92,4 @@ public class BreakTimeService {
                         breakTime.getBreakDuration().compareTo(Duration.ofMinutes(1)) < 0).collect(Collectors.toList());
         return new PageImpl<>(filteredBreakTimes, pageable, breakTimes.getTotalElements());
     }
-
-    public Page<BreakTime> findAllAnomalies(Pageable pageable) {
-        Page<BreakTime> breakTimes = breakTimeRepository.findAll(pageable);
-        List<BreakTime> filteredBreakTimes = breakTimes.getContent().stream()
-                .filter(breakTime -> breakTime.getBreakDuration().compareTo(Duration.ofMinutes(20)) > 0 ||
-                        breakTime.getBreakDuration().compareTo(Duration.ofMinutes(1)) < 0).collect(Collectors.toList());
-        return new PageImpl<>(filteredBreakTimes, pageable, breakTimes.getTotalElements());
-    }
 }
