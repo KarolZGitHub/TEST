@@ -8,9 +8,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -38,5 +41,9 @@ public class WorkingDurationService {
         } else {
             return workingDurationRepository.findAll(pageable);
         }
+    }
+    public WorkingDuration findByDateBetween(LocalDateTime start, LocalDateTime finish){
+        return workingDurationRepository.findByDateBetween(start,finish).orElseThrow(
+                ()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Working duration has not been found"));
     }
 }

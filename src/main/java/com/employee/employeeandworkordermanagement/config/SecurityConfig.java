@@ -34,7 +34,8 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/users/**", "/profile/**", "/task/**", "api/**", "/upload/**",
-                        "/designer/**", "/message/**", "/work/**", "break-time/**", "work-duration/**")
+                        "/designer/**", "/message/**", "/work/**", "break-time/**", "work-duration/**",
+                        "/time-issue/**")
                 .hasAnyAuthority("ADMIN", "OPERATOR", "DESIGNER")
                 .and()
                 .authorizeHttpRequests()
@@ -42,7 +43,8 @@ public class SecurityConfig {
                 .hasAuthority("ADMIN")
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/edit/**", "/work-manage/**", "/break-time-manage/**")
+                .requestMatchers("/edit/**", "/work-manage/**", "/break-time-manage/**",
+                        "/manage-time-issue")
                 .hasAnyAuthority("ADMIN", "OPERATOR")
                 .and()
                 .formLogin()

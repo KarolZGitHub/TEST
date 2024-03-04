@@ -43,7 +43,9 @@
             <td th:text="${breakTime.finishTime != null ? #temporals.format(breakTime.finishTime, 'yyyy-MM-dd HH:mm:ss') : 'N/A'}"></td>
             <td th:text="${breakTime.isActive ? 'Active' : 'Inactive'}"></td>
             <td th:text="${breakTime.breakDuration != null ? breakTime.breakDuration.toMinutes() + ' min' : 'N/A'}"></td>
-            <!-- TODO: report action -->
+            <td>
+                <a th:href="@{/time-issue/create(id=${breakTime.id})}" class="btn btn-warning">Report Mistake</a>
+            </td>
         </tr>
         </tbody>
     </table>

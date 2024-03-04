@@ -25,6 +25,9 @@ public class BreakTime {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    @NotNull(message = "Session has to be set.")
+    @ManyToOne
+    private WorkingSession workingSession;
 
     @PrePersist
     protected void onCreate() {

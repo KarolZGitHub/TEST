@@ -43,15 +43,6 @@ public class MessageService {
         messageRepository.save(message);
     }
 
-    public void notifyDesignerIfTaskIsDeleted(User designer, User sender, Task task) {
-        Message message = new Message();
-        message.setTitle("Task deletion.");
-        message.setContent(task.getTaskName() + " has been deleted");
-        message.setReceiver(designer);
-        message.setSender(sender);
-        messageRepository.save(message);
-    }
-
     public void deleteMessage(Message message) {
         messageRepository.delete(message);
     }
@@ -84,6 +75,7 @@ public class MessageService {
         message.setReceiver(operator);
         messageRepository.save(message);
     }
+
     public void notifyOperatorThatTaskIsArchived(User operator, User sender, Task task) {
         Message message = new Message();
         message.setTitle("Task archived");
@@ -92,6 +84,7 @@ public class MessageService {
         message.setReceiver(operator);
         messageRepository.save(message);
     }
+
     public void notifyDesignerThatTaskIsArchived(User designer, User sender, Task task) {
         Message message = new Message();
         message.setTitle("Task archived");

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="~{header}">
+    <title>Break Time Edit Request</title>
+</head>
+<body>
+<h1>Break Time Edit Request</h1>
+<div class="container">
+    <h2>Create Break Time Edit Request</h2>
+    <form th:action="@{/time-issue/create(id=${id})}" th:object="${breakTimeIssueRequest}" method="post">
+        <div class="form-group">
+            <label for="type">Type:</label>
+            <select class="form-control" id="type" name="type">
+                <option th:each="type : ${typeList}" th:value="${type}" th:text="${type}"></option>
+            </select>
+            <label for="minutes">Minutes:</label>
+            <input type="number" class="form-control" id="minutes" name="minutes" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+</body>
+<!-- Footer-->
+<div th:insert="~{footer}"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</html>

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Repository
 public interface WorkingDurationRepository extends JpaRepository<WorkingDuration, Long> {
@@ -19,4 +20,5 @@ public interface WorkingDurationRepository extends JpaRepository<WorkingDuration
 
     Page<WorkingDuration> findAllByDateBetween(LocalDateTime startDate, LocalDateTime endDate,
                                                Pageable pageable);
+    Optional<WorkingDuration> findByDateBetween(LocalDateTime start, LocalDateTime finish);
 }

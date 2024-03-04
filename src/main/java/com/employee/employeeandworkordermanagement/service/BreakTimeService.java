@@ -1,10 +1,9 @@
 package com.employee.employeeandworkordermanagement.service;
 
-import com.employee.employeeandworkordermanagement.entity.BreakTime;
-import com.employee.employeeandworkordermanagement.entity.Task;
-import com.employee.employeeandworkordermanagement.entity.User;
-import com.employee.employeeandworkordermanagement.entity.WorkingSession;
+import com.employee.employeeandworkordermanagement.entity.*;
 import com.employee.employeeandworkordermanagement.repository.BreakTimeRepository;
+import com.employee.employeeandworkordermanagement.repository.WorkingDurationRepository;
+import com.employee.employeeandworkordermanagement.repository.WorkingSessionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -25,6 +24,9 @@ import java.util.stream.Collectors;
 public class BreakTimeService {
     private final BreakTimeRepository breakTimeRepository;
     private final UserService userService;
+    private final WorkingSessionRepository workingSessionRepository;
+    private final WorkingDurationService workingDurationService;
+    private final WorkingDurationRepository workingDurationRepository;
 
     public Duration workingDurationWithBreaks(List<BreakTime> breakTimeList, WorkingSession workingSession) {
         List<BreakTime> filteredList = breakTimeList.stream().filter(b -> b.getStartTime().isAfter(
@@ -48,6 +50,9 @@ public class BreakTimeService {
         breakTime.setStartTime(LocalDateTime.now());
         breakTime.setUser(task.getDesigner());
         breakTime.setWorkingAtTaskName(task.getTaskName());
+        breakTime.setWorkingSession(workingSessionRepository.findByisActiveAndTaskAndUser(true, task,
+                task.getDesigner()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                "Working session has not been found.")));
         breakTimeRepository.save(breakTime);
     }
 
@@ -91,5 +96,25 @@ public class BreakTimeService {
                 .filter(breakTime -> breakTime.getBreakDuration().compareTo(Duration.ofMinutes(20)) > 0 ||
                         breakTime.getBreakDuration().compareTo(Duration.ofMinutes(1)) < 0).collect(Collectors.toList());
         return new PageImpl<>(filteredBreakTimes, pageable, breakTimes.getTotalElements());
+    }
+
+    public BreakTime findById(Long id) {
+        return breakTimeRepository.findById(id).orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Break time has not been found."));
+    }
+
+    public void handleAccidentallyStartedBreak(BreakTime breakTime) {
+        WorkingSession workingSession = breakTime.getWorkingSession();
+        if (workingSession.isActive()) {
+            breakTimeRepository.delete(breakTime);
+        } else {
+            workingSession.setDuration(workingSession.getDuration().minus(breakTime.getBreakDuration()));
+            workingSessionRepository.save(workingSession);
+            breakTimeRepository.delete(breakTime);
+            WorkingDuration workingDuration = workingDurationService.findByDateBetween(breakTime.getStartTime(),
+                    breakTime.getFinishTime());
+            workingDuration.setDuration(workingDuration.getDuration().minus(breakTime.getBreakDuration()));
+            workingDurationRepository.save(workingDuration);
+        }
     }
 }
