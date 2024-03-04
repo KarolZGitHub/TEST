@@ -133,9 +133,4 @@ public class WorkingSessionService {
         }
         return list.subList(startItem, toIndex);
     }
-
-    public WorkingSession findByActiveAndByTaskAndByUser(boolean active, Task task, User user) {
-        return workingSessionRepository.findByisActiveAndTaskAndUser(active, task, user).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Working session has not been found"));
-    }
 }

@@ -4,6 +4,8 @@ import com.employee.employeeandworkordermanagement.entity.BreakTime;
 import com.employee.employeeandworkordermanagement.entity.BreakTimeIssueRequest;
 import com.employee.employeeandworkordermanagement.repository.BreakTimeIssueRequestRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -31,5 +33,9 @@ public class BreakTimeIssueRequestService {
     public BreakTimeIssueRequest findById(Long id) {
         return breakTimeIssueRequestRepository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Request has not been found"));
+    }
+
+    public Page<BreakTimeIssueRequest> allRequests(PageRequest pageRequest) {
+        return breakTimeIssueRequestRepository.findAll(pageRequest);
     }
 }

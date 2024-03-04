@@ -3,6 +3,9 @@ package com.employee.employeeandworkordermanagement.controller;
 import com.employee.employeeandworkordermanagement.entity.BreakTimeIssueRequest;
 import com.employee.employeeandworkordermanagement.service.BreakTimeIssueRequestService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,4 +40,15 @@ public class TimeIssueRequestController {
         return "redirect:/break-time/break-anomalies";
     }
 
+    @GetMapping("/break-time-requests")
+    public String showAllBreakTimeRequests(@RequestParam(required = false, defaultValue = "0") int page,
+                                           @RequestParam(required = false, defaultValue = "asc") String direction,
+                                           @RequestParam(required = false, defaultValue = "id") String sortField,
+                                           Model model) {
+        model.addAttribute("sortField", sortField);
+        Sort sort = Sort.by(Sort.Direction.fromString(direction), sortField);
+        Page<BreakTimeIssueRequest> requestsPage = breakTimeIssueRequestService.allRequests(PageRequest.of(page, 50, sort));
+        model.addAttribute("requestsPage", requestsPage);
+        return "timeIssue/breakTimeRequests";
+    }
 }

@@ -57,7 +57,6 @@ public class TaskController {
                                @RequestParam(required = false, defaultValue = "asc") String direction,
                                @RequestParam(required = false, defaultValue = "id") String sortField,
                                Model model) {
-        model.addAttribute("sortField", sortField);
         Sort sort = Sort.by(Sort.Direction.fromString(direction), sortField);
         Page<Task> taskPage = taskService.getAllTasksPage(PageRequest.of(page, 50, sort));
         model.addAttribute("taskPage", taskPage);
