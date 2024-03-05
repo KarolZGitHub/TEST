@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/edit/**", "/work-manage/**", "/break-time-manage/**",
-                        "/manage-time-issue")
+                        "/manage-time-issue/**")
                 .hasAnyAuthority("ADMIN", "OPERATOR")
                 .and()
                 .formLogin()

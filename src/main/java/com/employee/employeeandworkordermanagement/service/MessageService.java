@@ -1,5 +1,6 @@
 package com.employee.employeeandworkordermanagement.service;
 
+import com.employee.employeeandworkordermanagement.entity.BreakTimeIssueRequest;
 import com.employee.employeeandworkordermanagement.entity.Message;
 import com.employee.employeeandworkordermanagement.entity.Task;
 import com.employee.employeeandworkordermanagement.entity.User;
@@ -15,7 +16,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MessageService {
     private final MessageRepository messageRepository;
-    private final UserService userService;
 
     public void saveMessage(Message message) {
         messageRepository.save(message);
@@ -89,6 +89,23 @@ public class MessageService {
         Message message = new Message();
         message.setTitle("Task archived");
         message.setContent("Task " + task.getTaskName() + " has been archived.");
+        message.setSender(sender);
+        message.setReceiver(designer);
+        messageRepository.save(message);
+    }
+
+    public void notifyDesignerThatBreakTimeRequestAccepted(User designer, User sender) {
+        Message message = new Message();
+        message.setTitle("Break time issue request accepted");
+        message.setContent("Your request has been accepted.");
+        message.setSender(sender);
+        message.setReceiver(designer);
+        messageRepository.save(message);
+    }
+    public void notifyDesignerThatBreakTimeRequestDeclined(User designer, User sender) {
+        Message message = new Message();
+        message.setTitle("Break time issue request has been declined.");
+        message.setContent("Your request has been declined.");
         message.setSender(sender);
         message.setReceiver(designer);
         messageRepository.save(message);

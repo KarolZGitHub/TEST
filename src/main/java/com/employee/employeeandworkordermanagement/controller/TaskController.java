@@ -44,9 +44,7 @@ public class TaskController {
         if (authentication != null) {
             User user = userService.findOptionalUserByEmail(authentication.getName()).orElseThrow(
                     () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User has not been found"));
-            if (user.getRole().equals(Role.ADMIN) || user.getRole().equals(Role.OPERATOR)) {
-                return true;
-            } else return false;
+            return user.getRole().equals(Role.ADMIN) || user.getRole().equals(Role.OPERATOR);
         } else {
             return false;
         }

@@ -20,5 +20,6 @@ public interface WorkingDurationRepository extends JpaRepository<WorkingDuration
 
     Page<WorkingDuration> findAllByDateBetween(LocalDateTime startDate, LocalDateTime endDate,
                                                Pageable pageable);
-    Optional<WorkingDuration> findByDateBetween(LocalDateTime start, LocalDateTime finish);
+    Optional<WorkingDuration> findByDateBetweenAndUser(LocalDateTime start, LocalDateTime finish, User user);
+    Optional<WorkingDuration> findByTaskNameAndUser(String taskName,User user);
 }

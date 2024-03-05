@@ -13,7 +13,7 @@
             <select class="form-control" id="type" name="type">
                 <option th:each="type : ${typeList}" th:value="${type}" th:text="${type}"></option>
             </select>
-            <label for="minutes">Minutes:</label>
+            <label for="minutes">How many minutes did the break last?</label>
             <input type="number" class="form-control" id="minutes" name="minutes" required>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>

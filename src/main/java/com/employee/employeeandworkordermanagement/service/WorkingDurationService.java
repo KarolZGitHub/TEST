@@ -42,8 +42,14 @@ public class WorkingDurationService {
             return workingDurationRepository.findAll(pageable);
         }
     }
-    public WorkingDuration findByDateBetween(LocalDateTime start, LocalDateTime finish){
-        return workingDurationRepository.findByDateBetween(start,finish).orElseThrow(
-                ()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Working duration has not been found"));
+
+    public WorkingDuration findByDateBetween(LocalDateTime start, LocalDateTime finish, User user) {
+        return workingDurationRepository.findByDateBetweenAndUser(start, finish, user).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Working duration has not been found"));
+    }
+
+    public WorkingDuration findByTaskNameAndUser(String taskName, User user) {
+        return workingDurationRepository.findByTaskNameAndUser(taskName, user).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Working duration has not been found"));
     }
 }

@@ -1,6 +1,7 @@
 package com.employee.employeeandworkordermanagement.service;
 
 import com.employee.employeeandworkordermanagement.entity.*;
+import com.employee.employeeandworkordermanagement.repository.BreakTimeIssueRequestRepository;
 import com.employee.employeeandworkordermanagement.repository.BreakTimeRepository;
 import com.employee.employeeandworkordermanagement.repository.WorkingDurationRepository;
 import com.employee.employeeandworkordermanagement.repository.WorkingSessionRepository;
@@ -25,8 +26,8 @@ public class BreakTimeService {
     private final BreakTimeRepository breakTimeRepository;
     private final UserService userService;
     private final WorkingSessionRepository workingSessionRepository;
-    private final WorkingDurationService workingDurationService;
     private final WorkingDurationRepository workingDurationRepository;
+    private final BreakTimeIssueRequestRepository breakTimeIssueRequestRepository;
 
     public Duration workingDurationWithBreaks(List<BreakTime> breakTimeList, WorkingSession workingSession) {
         List<BreakTime> filteredList = breakTimeList.stream().filter(b -> b.getStartTime().isAfter(
@@ -103,18 +104,72 @@ public class BreakTimeService {
                 HttpStatus.NOT_FOUND, "Break time has not been found."));
     }
 
-    public void handleAccidentallyStartedBreak(BreakTime breakTime) {
+    public void acceptBreakTimeIssueRequest(BreakTimeIssueRequest breakTimeIssueRequest) {
+        BreakTime breakTime = breakTimeIssueRequest.getBreakTime();
         WorkingSession workingSession = breakTime.getWorkingSession();
-        if (workingSession.isActive()) {
-            breakTimeRepository.delete(breakTime);
-        } else {
-            workingSession.setDuration(workingSession.getDuration().minus(breakTime.getBreakDuration()));
-            workingSessionRepository.save(workingSession);
-            breakTimeRepository.delete(breakTime);
-            WorkingDuration workingDuration = workingDurationService.findByDateBetween(breakTime.getStartTime(),
-                    breakTime.getFinishTime());
-            workingDuration.setDuration(workingDuration.getDuration().minus(breakTime.getBreakDuration()));
-            workingDurationRepository.save(workingDuration);
+        WorkingDuration workingDuration = new WorkingDuration();
+
+        switch (breakTimeIssueRequest.getType().toLowerCase()) {
+            case "accidentally added break time.":
+                if (workingSession.isActive()) {
+                    breakTimeRepository.delete(breakTime);
+                    break;
+                } else {
+                    workingSession.setDuration(workingSession.getDuration().minus(breakTime.getBreakDuration()));
+                    workingDuration.setDuration(Duration.ZERO.minus(breakTime.getBreakDuration()));
+                    workingDuration.setTaskName("Deleted accidentally created break time.");
+                    workingDuration.setUser(breakTime.getUser());
+                    workingDuration.setDate(LocalDateTime.now());
+                    workingDurationRepository.save(workingDuration);
+                    workingSessionRepository.save(workingSession);
+                    breakTimeRepository.delete(breakTime);
+                    break;
+                }
+            case "forgot to stop break time.":
+                if (workingSession.isActive()) {
+                    breakTime.setBreakDuration(Duration.ofMinutes(breakTimeIssueRequest.getMinutes()));
+                    breakTime.setFinishTime(breakTime.getStartTime().plus(breakTime.getBreakDuration()));
+                    breakTimeRepository.save(breakTime);
+                    break;
+                } else {
+                    breakTime.setBreakDuration(Duration.ofMinutes(breakTimeIssueRequest.getMinutes()));
+                    breakTime.setFinishTime(breakTime.getStartTime().plus(breakTime.getBreakDuration()));
+                    breakTimeRepository.save(breakTime);
+                    Duration breakDifference = breakTime.getBreakDuration().minus(Duration.ofMinutes(
+                            breakTimeIssueRequest.getMinutes()));
+                    workingSession.setDuration(workingSession.getDuration().minus(breakDifference));
+                    workingDuration.setDuration(Duration.ZERO.minus(breakDifference));
+                    workingDuration.setTaskName("Compensation of working time.");
+                    workingDuration.setUser(breakTime.getUser());
+                    workingDuration.setDate(LocalDateTime.now());
+                    workingDurationRepository.save(workingDuration);
+                    workingSessionRepository.save(workingSession);
+                    break;
+                }
+            case "forgot to start break time.":
+                if (workingSession.isActive()) {
+                    breakTime.setBreakDuration(Duration.ofMinutes(breakTimeIssueRequest.getMinutes()));
+                    breakTime.setStartTime(breakTime.getFinishTime().minus(breakTime.getBreakDuration()));
+                    breakTimeRepository.save(breakTime);
+                    break;
+                } else {
+                    breakTime.setBreakDuration(Duration.ofMinutes(breakTimeIssueRequest.getMinutes()));
+                    breakTimeRepository.save(breakTime);
+                    Duration breakDifference = breakTime.getBreakDuration().plus(Duration.ofMinutes(
+                            breakTimeIssueRequest.getMinutes()));
+                    workingSession.setDuration(workingSession.getDuration().plus(breakDifference));
+                    workingDuration.setDuration(Duration.ZERO.plus(breakDifference));
+                    workingDuration.setTaskName("Compensation of working time.");
+                    workingDuration.setUser(breakTime.getUser());
+                    workingDuration.setDate(LocalDateTime.now());
+                    workingDurationRepository.save(workingDuration);
+                    workingSessionRepository.save(workingSession);
+                    break;
+                }
         }
+    }
+
+    public void declineBreakTimeIssueRequest(BreakTimeIssueRequest breakTimeIssueRequest) {
+        breakTimeIssueRequestRepository.delete(breakTimeIssueRequest);
     }
 }
