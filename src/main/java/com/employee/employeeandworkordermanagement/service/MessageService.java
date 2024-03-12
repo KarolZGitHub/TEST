@@ -1,6 +1,5 @@
 package com.employee.employeeandworkordermanagement.service;
 
-import com.employee.employeeandworkordermanagement.entity.BreakTimeIssueRequest;
 import com.employee.employeeandworkordermanagement.entity.Message;
 import com.employee.employeeandworkordermanagement.entity.Task;
 import com.employee.employeeandworkordermanagement.entity.User;
@@ -102,6 +101,7 @@ public class MessageService {
         message.setReceiver(designer);
         messageRepository.save(message);
     }
+
     public void notifyDesignerThatBreakTimeRequestDeclined(User designer, User sender) {
         Message message = new Message();
         message.setTitle("Break time issue request has been declined.");

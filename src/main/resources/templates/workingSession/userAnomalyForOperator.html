@@ -31,9 +31,14 @@
         <tbody>
         <tr th:each="workingSession : ${anomalyPage.content}">
             <td th:text="${workingSession.id}"></td>
-            <td th:text="${#temporals.format(workingSession.workStarted, 'yyyy-MM-dd HH:mm:ss')} ?: '-'"></td>
-            <td th:text="${#temporals.format(workingSession.workFinished, 'yyyy-MM-dd HH:mm:ss')} ?: '-'"></td>
-            <td th:text="${workingSession.duration.toHours()} + 'h ' + ${workingSession.duration.toMinutesPart()}
+            <td th:if="${workingSession.workStarted == null}" th:text="'N/A'"></td>
+            <td th:if="${workingSession.workStarted != null}" th:text="${#temporals.format(workingSession.workStarted,
+             'yyyy-MM-dd HH:mm:ss')} ?: '-'"></td>
+            <td th:if="${workingSession.workFinished == null}" th:text="'N/A'"></td>
+            <td th:if="${workingSession.workFinished != null}" th:text="${#temporals.format(workingSession.workFinished,
+             'yyyy-MM-dd HH:mm:ss')} ?: '-'"></td>
+            <td th:if="${workingSession.duration == null}" th:text="'N/A'"></td>
+            <td th:if="${workingSession.duration != null}" th:text="${workingSession.duration.toHours()} + 'h ' + ${workingSession.duration.toMinutesPart()}
             + 'min'"></td>
             <td th:text="${workingSession.task.taskName}"></td>
             <!-- Add action to report a mistake -->
